@@ -4,7 +4,7 @@
 #include<float.h>
 #include<string.h>
 
-#define NumOfMeans 3
+#define NumOfMeans 4
  void get_two_dimension(char* line, double** data, char *filename)
  {   
      FILE* stream = fopen(filename, "r");
@@ -93,14 +93,12 @@ int main(){
     for(int i = 0; i < dataNum; i++){
         setPoint(&pt[i], data[i][0], data[i][1]);
     }    
-    for(int i = 0; i < dataNum; i++){//一開始將前3點當中心
-        double dis[3] = {DBL_MAX, DBL_MAX, DBL_MAX};
+    for(int i = 0; i < dataNum; i++){//一開始將前k點當中心
+        double dis[NumOfMeans];
+        for(int j = 0; j < NumOfMeans; j++) dis[j] = DBL_MAX;
         int smallest;
-        for(int j = 0; j < NumOfMeans; j++){//計算i點到j點的距離
-            if(i == j) continue;
-            dis[j] = calDistance(&pt[i], &pt[j]);       
-        }
-        smallest = findSmallest(dis, 3);
+        for(int j = 0; j < NumOfMeans; j++) dis[j] = calDistance(&pt[i], &pt[j]);       
+        smallest = findSmallest(dis, NumOfMeans);
         class[smallest][classCount[smallest]] = i;//將距離最小點存到j class
         classCount[smallest]++;
     }
@@ -120,12 +118,11 @@ int main(){
             sumOfY[i] = 0;
         }
         for(int i = 0; i < dataNum; i++){
-            double dis[3] = {DBL_MAX, DBL_MAX, DBL_MAX};
+            double dis[NumOfMeans];
+            for(int j = 0; j < NumOfMeans; j++) dis[j] = DBL_MAX;
             int smallest;
-            for(int j = 0; j < NumOfMeans; j++){
-                dis[j] = calDistance(&pt[i], &mean[j]);       
-            }
-            smallest = findSmallest(dis, 3);
+            for(int j = 0; j < NumOfMeans; j++) dis[j] = calDistance(&pt[i], &mean[j]);       
+            smallest = findSmallest(dis, NumOfMeans);
             class[smallest][classCount[smallest]] = i;
             classCount[smallest]++;
         }
